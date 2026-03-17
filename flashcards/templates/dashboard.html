@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h1>Dashboard</h1>
+    <p>Welcome to your dashboard! Here you can manage your flashcards and track your progress.</p>
+
+    <h2>Your Flashcards</h2>
+
+    <p>Bin 1 : {{ stats.0.count }}</p>
+    <p>Bin 2 : {{ stats.1.count }}</p>
+    <p>Bin 3 : {{ stats.2.count }}</p>
+    <p>Bin 4 : {{ stats.3.count }}</p>
+    <p>Bin 5 : {{ stats.4.count }}</p>
+    
+    <p>Today to review: {{ to_review }}</p>
+
+    <button onclick="location.href='{% url 'start_review' %}'">Start Review</button>
+
+    
+{% endblock %}

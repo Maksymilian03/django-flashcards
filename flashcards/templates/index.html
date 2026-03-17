@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h1>Welcome to the Flashcards App!</h1>
+    {% for flashcard in flashcards %}
+        <p>{{ flashcard.question }} - {{ flashcard.answer }}</p>
+        <button>Show Answer</button>
+        <button>Mark as Known</button>
+        <button>Mark as Unknown</button>
+    {% endfor %}
+    <h2>Your Progress</h2>
+    {% for progress in progress %}
+        <p>{{ progress.flashcard.question }}- Koszyk: {{ progress.bin  }}, Next Review: {{ progress.next_review|default:"Not scheduled" }}</p>
+    {% endfor %}
+
+{% endblock %}

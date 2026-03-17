@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h1>Flashcard Review</h1>
+    <p>Welcome to your review session! Here you can review your flashcards.</p>
+
+    <h2>Your Flashcards</h2>
+    {% if to_review %}
+        <p>{{ to_review.flashcard.question }} - {{ to_review.flashcard.answer }}</p>
+        <button>Show Answer</button>
+        <button>Mark as Known</button>
+        <button>Mark as Unknown</button>
+    {% endif %}
+
+
+{% endblock %}

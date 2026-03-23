@@ -6,10 +6,12 @@
 
     <h2>Your Flashcards</h2>
     {% if to_review %}
-        <p>{{ to_review.flashcard.question }} - {{ to_review.flashcard.answer }}</p>
-        <button>Show Answer</button>
-        <button>Mark as Known</button>
-        <button>Mark as Unknown</button>
+        {% for to_review in to_review %}
+            <p>{{ to_review.flashcard.question }} - {{ to_review.flashcard.answer }}</p>
+            <button>Show Answer</button>
+            <button>Mark as Known</button>
+            <button>Mark as Unknown</button>
+        {% endfor %}
     {% endif %}
 
 

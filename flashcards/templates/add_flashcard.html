@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+
+    <h1>Add New Flashcard</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>Note: The "Next Review Date" will be automatically set based on your review schedule.</p>
+        <button type="submit">Add Flashcard</button>
+    </form>
+
+{% endblock %}

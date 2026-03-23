@@ -2,15 +2,19 @@
 {% block content %}
 
     <h1>Welcome to the Flashcards App!</h1>
-    {% for flashcard in flashcards %}
-        <p>{{ flashcard.question }} - {{ flashcard.answer }}</p>
-        <button>Show Answer</button>
-        <button>Mark as Known</button>
-        <button>Mark as Unknown</button>
-    {% endfor %}
-    <h2>Your Progress</h2>
-    {% for progress in progress %}
-        <p>{{ progress.flashcard.question }}- Koszyk: {{ progress.bin  }}, Next Review: {{ progress.next_review|default:"Not scheduled" }}</p>
-    {% endfor %}
+    <p>Hello, {{ user.username }}! Go to your dashboard to manage your flashcards.</p>
+    
+    {% if user.is_authenticated %}
+        <button onclick="location.href='{% url 'dashboard' %}'">Go to Dashboard</button>
+
+    
+        <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-link">Logout</button>
+        </form>
+        
+    {% else %}
+        <p><a href="{% url 'login' %}">Login</a> or <a href="{% url 'register' %}">register</a> to get started!</p>
+    {% endif %}
 
 {% endblock %}

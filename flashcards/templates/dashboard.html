@@ -14,6 +14,8 @@
     
     <p>Today to review: {{ to_review }}</p>
 
+    <a href="{% url 'add_flashcard' %}">Add New Flashcard</a>
+
     <button onclick="location.href='{% url 'start_review' %}'">Start Review</button>
 
     

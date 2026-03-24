@@ -51,7 +51,7 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'register.html', {'form': form})
 
-
+@login_required
 def add_flashcard(request):
     if request.method == 'POST':
         form = FlashcardForm(request.POST)

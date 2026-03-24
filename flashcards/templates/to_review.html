@@ -7,12 +7,36 @@
     <h2>Your Flashcards</h2>
     {% if to_review %}
         {% for to_review in to_review %}
-            <p>{{ to_review.flashcard.question }} - {{ to_review.flashcard.answer }}</p>
-            <button>Show Answer</button>
-            <button>Mark as Known</button>
-            <button>Mark as Unknown</button>
+        <div class="flashcard-container mb-4 p-3 border rounded shadow-sm">
+            <p class="h5">Question: {{ to_review.flashcard.question }}</p>
+            <p class="answer text-success fw-bold" style="display: none;">Answer: {{ to_review.flashcard.answer }}</p>
+            
+            <button class="btn btn-secondary btn-sm show-answer-btn">Show Answer</button>
+            <button class="btn btn-success btn-sm">Mark as Known</button>
+            <button class="btn btn-danger btn-sm">Mark as Unknown</button>
+        </div>
         {% endfor %}
     {% endif %}
 
+    <script>
+        // JavaScript to handle button clicks and update flashcard status
+        const buttons = document.querySelectorAll('.show-answer-btn');
+        
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                const flashcardContainer = button.closest('.flashcard-container');
+                const answer = flashcardContainer.querySelector('.answer');
+
+                if (answer.style.display === 'block') {
+                    answer.style.display = 'none';
+                    button.textContent = 'Show Answer';
+                } else {
+                    button.textContent = 'Hide Answer';
+                    answer.style.display = 'block';
+                }
+            });
+        });
+
+    </script>
 
 {% endblock %}

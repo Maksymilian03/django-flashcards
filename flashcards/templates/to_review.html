@@ -12,8 +12,8 @@
             <p class="answer text-success fw-bold" style="display: none;">Answer: {{ to_review.flashcard.answer }}</p>
             
             <button class="btn btn-secondary btn-sm show-answer-btn">Show Answer</button>
-            <button class="btn btn-success btn-sm">Mark as Known</button>
-            <button class="btn btn-danger btn-sm">Mark as Unknown</button>
+            <a class="btn btn-success btn-sm" href="{% url 'mark_flashcard' to_review.id 'true' %}">Mark as Known</a>
+            <a class="btn btn-danger btn-sm" href="{% url 'mark_flashcard' to_review.id 'false' %}">Mark as Unknown</a>
         </div>
         {% endfor %}
     {% endif %}

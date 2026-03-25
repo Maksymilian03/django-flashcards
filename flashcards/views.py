@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User 
 from .forms import FlashcardForm
 
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from .models import Flashcard, UserProgress
 # Create your views here.
 
@@ -14,7 +14,7 @@ def index(request):
     return render(request, 'index.html', {
         
     })
-
+@login_required
 def dashboard(request):
     stats = []
 
@@ -30,6 +30,8 @@ def dashboard(request):
         'stats': stats,
         'to_review': to_review
     })
+
+@login_required
 
 def start_review(request):
     
@@ -62,3 +64,34 @@ def add_flashcard(request):
     else:
         form = FlashcardForm()
     return render(request, 'add_flashcard.html', {'form': form})
+
+
+@login_required
+def mark_flashcard(request, progress_id, correct):
+    progress = get_object_or_404(UserProgress, id=progress_id, user=request.user)
+
+    data_now = timezone.now()
+
+    if correct:
+        if progress.bin == 0:
+            days_to_add = 1
+        elif progress.bin == 1:
+            days_to_add = 3         
+        elif progress.bin == 2:
+            days_to_add = 7
+        elif progress.bin == 3:
+            days_to_add = 14
+        elif progress.bin == 4:
+            days_to_add = 30
+        
+        progress.bin += 1
+        progress.next_review = data_now + timezone.timedelta(days=days_to_add)
+    
+    else:
+        progress.next_review = data_now + timezone.timedelta(days=1)
+    
+    progress.last_reviewed = data_now
+    progress.save()
+
+    return redirect('start_review')
+    

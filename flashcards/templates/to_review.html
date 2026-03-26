@@ -16,6 +16,8 @@
             <a class="btn btn-danger btn-sm" href="{% url 'mark_flashcard' to_review.id 'false' %}">Mark as Unknown</a>
         </div>
         {% endfor %}
+    {% else %}
+        <p>No flashcards to review today. Great job!</p>
     {% endif %}
 
     <script>

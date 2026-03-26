@@ -16,18 +16,16 @@ def index(request):
     })
 @login_required
 def dashboard(request):
-    stats = []
 
-    for i in range (1, 6):
-        stats.append({
-            'bin': i,
-            'count': UserProgress.objects.filter(user=request.user, bin=i).count()
-        })
-    
-    to_review = UserProgress.objects.filter(user=request.user, next_review__lte=timezone.now()).count()
+    to_learn = UserProgress.objects.filter(user=request.user, bin__lt=6).count()
+
+    flashcards_learned =UserProgress.objects.filter(user=request.user, bin=6).count()
+
+    to_review = UserProgress.objects.filter(user=request.user, next_review__date__lte=timezone.now().date()).count()
 
     return render(request, 'dashboard.html', {
-        'stats': stats,
+        'to_learn': to_learn,
+        'flashcards_learned': flashcards_learned,
         'to_review': to_review
     })
 
@@ -35,7 +33,7 @@ def dashboard(request):
 
 def start_review(request):
     
-    to_review = UserProgress.objects.filter(user=request.user, next_review__lte=timezone.now()).all()
+    to_review = UserProgress.objects.filter(user=request.user, next_review__date__lte=timezone.now().date()).all()
 
     return render(request, 'to_review.html', {
         'to_review': to_review

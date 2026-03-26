@@ -4,15 +4,29 @@
     <h1>Dashboard</h1>
     <p>Welcome to your dashboard! Here you can manage your flashcards and track your progress.</p>
 
+    {% if not to_learn and not to_review and not flashcards_learned %}
+    <p>You have no flashcards yet. Start by adding some flashcards to learn!</p>  
+    {% else %}
     <h2>Your Flashcards</h2>
+    {% endif %}
 
-    <p>Bin 1 : {{ stats.0.count }}</p>
-    <p>Bin 2 : {{ stats.1.count }}</p>
-    <p>Bin 3 : {{ stats.2.count }}</p>
-    <p>Bin 4 : {{ stats.3.count }}</p>
-    <p>Bin 5 : {{ stats.4.count }}</p>
+    {% if to_learn %}
+    <p>To learn : {{ to_learn }}</p>
+    {% endif %}
     
+    {% if to_review %}
     <p>Today to review: {{ to_review }}</p>
+    {% else %}
+    <p>No flashcards to review today.</p>
+    {% endif %}
+
+    {% if flashcards_learned %}
+    <p>Flashcards learned: {{ flashcards_learned }}</p>
+    {% else %}
+    <p>No flashcards learned yet.</p>
+    {% endif %}
+
+    
 
     <button><a href="{% url 'add_flashcard' %}">Add New Flashcard</a></button>
 

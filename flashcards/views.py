@@ -21,7 +21,7 @@ def dashboard(request):
 
     flashcards_learned =UserProgress.objects.filter(user=request.user, bin=6).count()
 
-    to_review = UserProgress.objects.filter(user=request.user, next_review__date__lte=timezone.now().date()).count()
+    to_review = UserProgress.objects.filter(user=request.user, next_review__date__lte=timezone.now().date(), bin__lt=6).count()
 
     return render(request, 'dashboard.html', {
         'to_learn': to_learn,
@@ -33,7 +33,7 @@ def dashboard(request):
 
 def start_review(request):
     
-    to_review = UserProgress.objects.filter(user=request.user, next_review__date__lte=timezone.now().date()).all()
+    to_review = UserProgress.objects.filter(user=request.user, next_review__date__lte=timezone.now().date(), bin__lt=6).all()
 
     return render(request, 'to_review.html', {
         'to_review': to_review
@@ -70,7 +70,7 @@ def mark_flashcard(request, progress_id, correct):
 
     data_now = timezone.now()
 
-    if correct:
+    if correct == 'true':
         if progress.bin == 0:
             days_to_add = 1
         elif progress.bin == 1:
@@ -81,6 +81,8 @@ def mark_flashcard(request, progress_id, correct):
             days_to_add = 14
         elif progress.bin == 4:
             days_to_add = 30
+        elif progress.bin == 5:
+            days_to_add = 1
         
         progress.bin += 1
         progress.next_review = data_now + timezone.timedelta(days=days_to_add)

@@ -6,16 +6,21 @@
 
     <h2>Your Flashcards</h2>
     {% if to_review %}
-        {% for to_review in to_review %}
+        {% for r in to_review %}
         <div class="flashcard-container mb-4 p-3 border rounded shadow-sm">
-            <p class="h5">Question: {{ to_review.flashcard.question }}</p>
-            <p class="answer text-success fw-bold" style="display: none;">Answer: {{ to_review.flashcard.answer }}</p>
-            
-            <button class="btn btn-secondary btn-sm show-answer-btn">Show Answer</button>
-            <a class="btn btn-success btn-sm" href="{% url 'mark_flashcard' to_review.id 'true' %}">Mark as Known</a>
-            <a class="btn btn-danger btn-sm" href="{% url 'mark_flashcard' to_review.id 'false' %}">Mark as Unknown</a>
+            <div class="flashcard-item {% if not forloop.first %}d-none{% endif %}" data-id="{{ r.id }}">
+                <p class="h5">Question: {{ r.flashcard.question }}</p>
+                <p class="answer text-success fw-bold" style="display: none;">Answer: {{ r.flashcard.answer }}</p>
+                
+                <button class="btn btn-secondary btn-sm show-answer-btn">Show Answer</button>
+                <a class="btn btn-success btn-sm d-none" href="{% url 'mark_flashcard' r.id 'true' %}">Mark as Known</a>
+                <a class="btn btn-danger btn-sm d-none" href="{% url 'mark_flashcard' r.id 'false' %}">Mark as Unknown</a>
+                </div>
         </div>
         {% endfor %}
+
+        <div id="empty-message" class="alert alert-info" style="display: none;">
+            <p>No more flashcards to review. Great job!</p>
     {% else %}
         <p>No flashcards to review today. Great job!</p>
     {% endif %}
@@ -28,6 +33,8 @@
             button.addEventListener('click', () => {
                 const flashcardContainer = button.closest('.flashcard-container');
                 const answer = flashcardContainer.querySelector('.answer');
+                const markKnownBtn = flashcardContainer.querySelector('.btn-success');
+                const markUnknownBtn = flashcardContainer.querySelector('.btn-danger');
 
                 if (answer.style.display === 'block') {
                     answer.style.display = 'none';
@@ -35,6 +42,8 @@
                 } else {
                     button.textContent = 'Hide Answer';
                     answer.style.display = 'block';
+                    markKnownBtn.classList.remove('d-none');
+                    markUnknownBtn.classList.remove('d-none');
                 }
             });
         });

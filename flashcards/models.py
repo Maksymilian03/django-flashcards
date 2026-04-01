@@ -15,7 +15,7 @@ class Flashcard(models.Model):
 class UserProgress(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     bin = models.IntegerField(default=0)
-    last_reviewed = models.DateTimeField(null=True, blank=True)
+    last_reviewed = models.DateTimeField(default=timezone.now)
     next_review = models.DateTimeField(default=timezone.now)
     flashcard = models.ForeignKey(Flashcard, on_delete=models.CASCADE)
 

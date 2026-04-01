@@ -1,36 +1,73 @@
 {% extends "base.html" %}
 {% block content %}
 
-    <h1>Dashboard</h1>
-    <p>Welcome to your dashboard! Here you can manage your flashcards and track your progress.</p>
+<div class="container mt-4">
+    <div class="dashboard">
+        <div class="dashboard-header mb-4">
+            <h1>Dashboard</h1>
+            <p>Welcome to your dashboard! Here you can manage your flashcards and track your progress.</p>
+        </div>
 
-    {% if not to_learn and not to_review and not flashcards_learned %}
-    <p>You have no flashcards yet. Start by adding some flashcards to learn!</p>  
-    {% else %}
-    <h2>Your Flashcards</h2>
-    {% endif %}
+        <div class="dashboard-content">
+            
+                {% if not to_learn and not to_review and not flashcards_learned %}
+                <p>You have no flashcards yet. Start by adding some flashcards to learn!</p>  
+                {% else %}
+                <h2>Your Flashcards</h2>
+                {% endif %}
+            <div class="dashboard-stats mb-4">
+                {% if to_learn %}
+                <p>To learn : {{ to_learn }}</p>
+                {% endif %}
+            
+                {% if to_review %}
+                <p>Today to review: {{ to_review }}</p>
+                {% else %}
+                <p>No flashcards to review today.</p>
+                {% endif %}
 
-    {% if to_learn %}
-    <p>To learn : {{ to_learn }}</p>
-    {% endif %}
-    
-    {% if to_review %}
-    <p>Today to review: {{ to_review }}</p>
-    {% else %}
-    <p>No flashcards to review today.</p>
-    {% endif %}
+            
+                {% if total_flashcards %}
+                <p>Total flashcards: {{ total_flashcards }}</p>
+                {% endif %}
 
-    {% if flashcards_learned %}
-    <p>Flashcards learned: {{ flashcards_learned }}</p>
-    {% else %}
-    <p>No flashcards learned yet.</p>
-    {% endif %}
+                {% if flashcards_learned %}
+                <p>Flashcards learned: {{ flashcards_learned }} from {{ total_flashcards }}</p>
+                {% else %}
+                <p><p>Flashcards learned: 0 from {{ total_flashcards }}</p></p>
+                {% endif %}
 
-    
+               
+                <div class="progress mb-3 position-relative" style="height: 25px;">
+                    <div class="position-absolute w-100 h-100 d-flex align-items-center justify-content-center" 
+                        style="pointer-events: none; z-index: 1; font-weight: bold; color: #000;">
+                        {% if progress_percentage == 0 %}
+                            Let's get started! Add some flashcards to begin your learning journey.
+                        {% elif progress_percentage > 0 and progress_percentage < 100 %}
+                            Great job! You're making progress. Keep reviewing your flashcards to master them!
+                        {% elif progress_percentage == 100 %}
+                            Congrats! You've mastered all your flashcards!
+                    
+                        {% endif %}
+                    </div>
+                    
+                   <div class="progress-bar"
+                        role="progressbar"
+                        style="width: {{ progress_percentage|default:0 }}%;"
+                        aria-valuenow="{{ progress_percentage|default:0 }}"
+                        aria-valuemin="0"
+                        aria-valuemax="100">
+                    </div>
+                </div>
 
-    <button><a href="{% url 'add_flashcard' %}">Add New Flashcard</a></button>
+                
+            </div>
+        </div>
+   
 
-    <button onclick="location.href='{% url 'start_review' %}'">Start Review</button>
+    <button><a class="btn btn-primary" href="{% url 'add_flashcard' %}">Add New Flashcard</a></button>
+
+    <button><a class="btn btn-primary" href="{% url 'start_review' %}">Start Review</a></button>
 
     
 {% endblock %}

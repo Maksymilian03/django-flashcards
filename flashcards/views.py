@@ -19,16 +19,22 @@ def dashboard(request):
 
     to_learn = UserProgress.objects.filter(user=request.user, bin__lt=6).count()
 
+    total_flashcards = UserProgress.objects.filter(user=request.user).count()
+
     flashcards_learned =UserProgress.objects.filter(user=request.user, bin=6).count()
 
     to_review = UserProgress.objects.filter(user=request.user, next_review__date__lte=timezone.now().date(), bin__lt=6).count()
 
+    progress_percentage = (flashcards_learned / (total_flashcards)) * 100 if (total_flashcards) > 0 else 0
+
     return render(request, 'dashboard.html', {
         'to_learn': to_learn,
         'flashcards_learned': flashcards_learned,
-        'to_review': to_review
-    })
-
+        'to_review': to_review,
+        'progress_percentage': round(progress_percentage, 1),
+        'total_flashcards': total_flashcards
+    })  
+    
 @login_required
 
 def start_review(request):
@@ -81,7 +87,7 @@ def mark_flashcard(request, progress_id, correct):
             days_to_add = 14
         elif progress.bin == 4:
             days_to_add = 30
-        elif progress.bin == 5:
+        else:
             days_to_add = 1
         
         progress.bin += 1
